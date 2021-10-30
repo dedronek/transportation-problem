@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/bootstrap.rtl.css" rel="stylesheet">
+  <link href="css/bootstrap-utilities.rtl.css" rel="stylesheet">
+  <link href="css/bootstrap-utilities.css" rel="stylesheet">
+  <script src="js/bootstrap.bundle.js"></script>
+  <script src="js/bootstrap.esm.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <link href="css/bootstrap-grid.css" rel="stylesheet">
+  <link href="css/bootstrap-grid.rtl.css" rel="stylesheet">
+  <link href="css/bootstrap-reboot.css" rel="stylesheet">
+  <link href="css/bootstrap-reboot.rtl.css" rel="stylesheet">
+
+</head>
+<body class="bg-light">
+<div class="container">
+  <div class="px-4 py-5 text-center">
+    <h1 class="h1">Zagadnienie transportowe - maksymalizacja zysków</h1>
+  </div>
+
+  <div class="py-4">
+    <p class="lead text-center">Uzupełnij tabelę poniżej aby obliczyć trasę optymalizującą zysk pośrednika.</p>
+  </div>
+</div>
+
+<div class="container-sm">
+  <table class="table-responsive table table-borderless">
+    <thead class="text-center">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">O1</th>
+      <th scope="col">O2</th>
+      <th scope="col">O3</th>
+      <th scope="col">O4</th>
+      <th scope="col">Podaż</th>
+      <th scope="col">Cena zakupu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th scope="row">D1</th>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="podaż" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+    </tr>
+    <tr>
+      <th scope="row">D2</th>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="koszt" type="number"></td>
+      <td><input class="form-control" placeholder="podaż" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+    </tr>
+    <tr>
+      <th scope="row">Popyt</th>
+      <td><input class="form-control" placeholder="popyt" type="number"></td>
+      <td><input class="form-control" placeholder="popyt" type="number"></td>
+      <td><input class="form-control" placeholder="popyt" type="number"></td>
+      <td><input class="form-control" placeholder="popyt" type="number"></td>
+    </tr>
+    <tr>
+      <th scope="row">Cena sprzedaży</th>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-grid col-5 mx-auto py-5">
+    <button class="btn btn-primary" type="button">Oblicz</button>
+  </div>
+
+</div>
+
+<div class="container">
+  <div class="py-5">
+    <h2 class="h2 text-center">Tabela zysków jednostkowych</h2>
+  </div>
+  <div class="container col-7">
+    <table class="table-responsive table table-borderless">
+      <thead class="text-center">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">O1</th>
+        <th scope="col">O2</th>
+        <th scope="col">O3</th>
+        <th scope="col">O4</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">D1</th>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+      </tr>
+      <tr>
+        <th scope="row">D2</th>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="py-5">
+    <h2 class="h2 text-center">Tabela optymalnych przewozów</h2>
+  </div>
+  <div class="container col-7">
+    <table class="table-responsive table table-borderless">
+      <thead class="text-center">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">O1</th>
+        <th scope="col">O2</th>
+        <th scope="col">O3</th>
+        <th scope="col">O4</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">D1</th>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+      </tr>
+      <tr>
+        <th scope="row">D2</th>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+        <td><p class="text-center">1</p></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<div class="container col-4">
+
+  <div class="py-5">
+    <h2 class="h2 text-center">Podsumowanie</h2>
+  </div>
+
+  <table class="table table-borderless">
+    <tbody>
+    <tr>
+      <th scope="row">Koszt całkowity</th>
+      <td><p class="text-start">1</p></td>
+
+    </tr>
+    <tr>
+      <th scope="row">Przychód całkowity</th>
+      <td><p class="text-start">1</p></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Zysk pośrednika</th>
+      <td><p class="text-start">1</p></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
