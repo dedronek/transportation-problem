@@ -6,10 +6,9 @@ let customerSelling_price = [] //Cena sprzedaży
 
 let transportCost = []; //Macierz kosztów transportu
 let unitProfit = [[], []]; //Macierz zysków jednostkowych
-
 let sortedUnitProfit = []; //Posortowana tablica zyskow jednostowych
-let baseTransport = [[], []]; //Tabela trasy bazowej
 
+let baseTransport = [[], []]; //Tabela trasy bazowej
 
 
 function getData() {
@@ -37,12 +36,10 @@ function countUnitProfit() { //Obliczanie zysku jednostkowego (1 wynik)
             $('#result1_table_' + (i + 1) + '_' + (l + 1)).text(unitProfit[i][l]); //Wypisywanie danych do html
         }
     }
-
     $('#result1_header, #result1_table').show(); //Pokazywanie dotychczas ukrytej 1 tabeli z wynikami
 }
 
 function sortUnitProfit() { // konwertowanie tabeli zysk -> zysk, wiersz, kolumna wraz z sortowaniem malejaco od zysku
-
     let counter = 0;
     for (let i = 0; i < 2; i++) {
         for (let l = 0; l < 4; l++) {
@@ -51,13 +48,13 @@ function sortUnitProfit() { // konwertowanie tabeli zysk -> zysk, wiersz, kolumn
             sortedUnitProfit[counter][1] = i; //wiersz (dostawca)
             sortedUnitProfit[counter][2] = l; //kolumna (odbiorca)
             counter++;
-
         }
     }
     //sortujemy nowa tablice od tras najbardziej zyskownych do tych najmniej
     sortedUnitProfit = sortedUnitProfit.sort(function (a, b) {
         return a[0] - b[0];
     }).reverse();
+    sortedUnitProfit.map(Number);
 }
 
 function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowych
@@ -102,8 +99,6 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
             if (customersWithTransport[x] == 0) //to tez nie wiem czy potrzebne
                 customersWithTransport.push(x);
         }
-
-
     }
 
 
@@ -122,7 +117,6 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
             countUnitProfit(); //Wynik 1
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
             calculateBaseTransportTable(); //obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
-
         }
     })
 })
