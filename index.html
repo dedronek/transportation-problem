@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Zagadnienie pośrednika</title>
   <link href="style/bootstrap.css" rel="stylesheet">
   <link href="style/bootstrap.rtl.css" rel="stylesheet">
   <link href="style/bootstrap-utilities.rtl.css" rel="stylesheet">
@@ -15,11 +15,15 @@
   <link href="style/bootstrap-reboot.css" rel="stylesheet">
   <link href="style/bootstrap-reboot.rtl.css" rel="stylesheet">
 
+  <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="src/script.js"></script>
+
 </head>
 <body class="bg-light">
 <div class="container">
   <div class="px-4 py-5 text-center">
-    <h1 class="h1">Zagadnienie transportowe - maksymalizacja zysków</h1>
+    <h1>Zagadnienie pośrednika - maksymalizacja zysków</h1>
+    <h3>Dawid Kędroń, Jędrzej Jagiełło</h3>
   </div>
 
   <div class="py-4">
@@ -27,7 +31,7 @@
   </div>
 </div>
 
-<div class="container-sm">
+<form class="container-sm" id="main_form" onsubmit="return false">
   <table class="table-responsive table table-borderless">
     <thead class="text-center">
     <tr>
@@ -43,50 +47,50 @@
     <tbody>
     <tr>
       <th scope="row">D1</th>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="podaż" type="number"></td>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D1O1" value="5" required/></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D1O2" value="10" required/></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D1O3" value="15" required/></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D1O4" value="10" required/></td>
+      <td><input class="form-control" placeholder="podaż" type="number" id="supply_D1" value="30" required /></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="purchase_price_D1" value="10" required /></td>
     </tr>
     <tr>
       <th scope="row">D2</th>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="koszt" type="number"></td>
-      <td><input class="form-control" placeholder="podaż" type="number"></td>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D2O1" value="10" required /></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D2O2" value="15" required /></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D2O3" value="20" required /></td>
+      <td><input class="form-control shipping_cost" placeholder="koszt" type="number" id="shipping_cost_D2O4" value="10" required /></td>
+      <td><input class="form-control" placeholder="podaż" type="number" id="supply_D2" value="30" required /></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="purchase_price_D2" value="12" required /></td>
     </tr>
     <tr>
       <th scope="row">Popyt</th>
-      <td><input class="form-control" placeholder="popyt" type="number"></td>
-      <td><input class="form-control" placeholder="popyt" type="number"></td>
-      <td><input class="form-control" placeholder="popyt" type="number"></td>
-      <td><input class="form-control" placeholder="popyt" type="number"></td>
+      <td><input class="form-control" placeholder="popyt" type="number" id="demand_O1" value="10" required /></td>
+      <td><input class="form-control" placeholder="popyt" type="number" id="demand_O2" value="10" required /></td>
+      <td><input class="form-control" placeholder="popyt" type="number" id="demand_O3" value="20" required /></td>
+      <td><input class="form-control" placeholder="popyt" type="number" id="demand_O4" value="10" required /></td>
     </tr>
     <tr>
       <th scope="row">Cena sprzedaży</th>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
-      <td><input class="form-control" placeholder="cena" type="number"></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="selling_price_O1" value="25" required /></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="selling_price_O2" value="30" required /></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="selling_price_O3" value="23" required /></td>
+      <td><input class="form-control" placeholder="cena" type="number" id="selling_price_O4" value="24" required /></td>
     </tr>
     </tbody>
   </table>
 
   <div class="d-grid col-5 mx-auto py-5">
-    <button class="btn btn-primary" type="button">Oblicz</button>
+    <button class="btn btn-primary" type="submit" id="count">Oblicz</button>
   </div>
 
-</div>
+</form>
 
 <div class="container">
-  <div class="py-5">
+  <div class="py-5" id="result1_header" style="display: none;">
     <h2 class="h2 text-center">Tabela zysków jednostkowych</h2>
   </div>
-  <div class="container col-7">
+  <div class="container col-7" id="result1_table" style="display: none;">
     <table class="table-responsive table table-borderless">
       <thead class="text-center">
       <tr>
@@ -100,17 +104,17 @@
       <tbody>
       <tr>
         <th scope="row">D1</th>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
+        <td><p class="text-center" id="result1_table_1_1">1</p></td>
+        <td><p class="text-center" id="result1_table_1_2">1</p></td>
+        <td><p class="text-center" id="result1_table_1_3">1</p></td>
+        <td><p class="text-center" id="result1_table_1_4">1</p></td>
       </tr>
       <tr>
         <th scope="row">D2</th>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
-        <td><p class="text-center">1</p></td>
+        <td><p class="text-center" id="result1_table_2_1">1</p></td>
+        <td><p class="text-center" id="result1_table_2_2">1</p></td>
+        <td><p class="text-center" id="result1_table_2_3">1</p></td>
+        <td><p class="text-center" id="result1_table_2_4">1</p></td>
       </tr>
       </tbody>
     </table>
@@ -119,10 +123,10 @@
 </div>
 
 <div class="container">
-  <div class="py-5">
+  <div class="py-5" id="result2_header" style="display: none;">
     <h2 class="h2 text-center">Tabela optymalnych przewozów</h2>
   </div>
-  <div class="container col-7">
+  <div class="container col-7" id="result2_table" style="display: none;">
     <table class="table-responsive table table-borderless">
       <thead class="text-center">
       <tr>
@@ -157,11 +161,11 @@
 
 <div class="container col-4">
 
-  <div class="py-5">
+  <div class="py-5" id="result3_header" style="display: none;">
     <h2 class="h2 text-center">Podsumowanie</h2>
   </div>
 
-  <table class="table table-borderless">
+  <table class="table table-borderless" id="result3_table" style="display: none;">
     <tbody>
     <tr>
       <th scope="row">Koszt całkowity</th>
