@@ -44,7 +44,7 @@ function sortUnitProfit() { // konwertowanie tabeli zysk -> zysk, wiersz, kolumn
     for (let i = 0; i < 2; i++) {
         for (let l = 0; l < 4; l++) {
             sortedUnitProfit[counter] = [];
-            sortedUnitProfit[counter][0] = unitProfit[i][l]; //zysk jednostkowy w pojedynczej komorce
+            sortedUnitProfit[counter][0] = unitProfit[i][l]; //zysk jednostkowy w pojedynczej komórce
             sortedUnitProfit[counter][1] = i; //wiersz (dostawca)
             sortedUnitProfit[counter][2] = l; //kolumna (odbiorca)
             counter++;
@@ -55,12 +55,13 @@ function sortUnitProfit() { // konwertowanie tabeli zysk -> zysk, wiersz, kolumn
         return a[0] - b[0];
     }).reverse();
     sortedUnitProfit.map(Number);
+    console.log(sortedUnitProfit)
 }
 
 function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowych
     // na ten moment jest to zrobione dla zbilansowanego zagadnienia (popyt=podaz)
-    // x - odbiorcy (customers) - lewo praww
-    // y - dostawcy (suppliers) - gora dol
+    // col - dostawcy (suppliers) - gora dol
+    // row - odbiorcy (customers) - lewo prawo
 
     let customersWithTransport = []; //tablica na obsluzonych odbiorcow (bez popytu)
     let suppliersWithTransport = []; //tablica na obsluzonych dostawcow (bez podazy)
@@ -69,35 +70,35 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
 
         //mozna by to nazwa row i col, nie byloby zdziwienia ze jest na odwrot przy uzyciu
 
-        let y = sortedUnitProfit[i][1];  //wybor dostawcy
-        let x = sortedUnitProfit[i][2];  //wybor odbiorcy
+        let col = sortedUnitProfit[i][1];  //wybor dostawcy
+        let row = sortedUnitProfit[i][2];  //wybor odbiorcy
 
-        console.log(y + ", " + x + " - " + supplierSupply[y] + ", " + customerDemand[x]);
+        //console.log(y + ", " + x + " - " + supplierSupply[y] + ", " + customerDemand[x]);
 
-        if (customersWithTransport.includes(x) || suppliersWithTransport.includes(y)) {
+        if (customersWithTransport.includes(row) || suppliersWithTransport.includes(col)) {
             //jesli w danej komorce nie ma popytu lub podazy, skipujemy
-            console.log("Klient obsluzony, skipping...");
+            //console.log("Klient obsluzony, skipping...");
             continue;
         }
 
-        if (supplierSupply[y] >= customerDemand[x]) {
+        if (supplierSupply[col] >= customerDemand[row]) {
             //sytuacja gdy mozemy spelnic w calosci zapotrzebowanie
-            console.log("Zapasy wieksze lub rowne niz zapotrzebowanie")
-            baseTransport[y][x] = customerDemand[x]; //w to miejsce wieziemy tyle ile popyt
-            supplierSupply[y] = supplierSupply[y] - customerDemand[x]; //zmniejszamy ilosc na stanie (podaz)
-            customerDemand[x] = 0; //zaspokojony popyt, nie wiem czy potrzebne?
-            customersWithTransport.push(x) //ten klient juz nie potrzebuje ("iksy" w tej kolumnie)
-            if (supplierSupply[y] == 0) //jesli przy tej akcji skonczyly sie zapasy, to dostawca tez na liste
-                suppliersWithTransport.push(y);
+            //console.log("Zapasy wieksze lub rowne niz zapotrzebowanie")
+            baseTransport[col][row] = customerDemand[row]; //w to miejsce wieziemy tyle ile popyt
+            supplierSupply[col] = supplierSupply[col] - customerDemand[row]; //zmniejszamy ilosc na stanie (podaz)
+            customerDemand[row] = 0; //zaspokojony popyt, nie wiem czy potrzebne?
+            customersWithTransport.push(row) //ten klient juz nie potrzebuje ("iksy" w tej kolumnie)
+            if (supplierSupply[col] == 0) //jesli przy tej akcji skonczyly sie zapasy, to dostawca tez na liste
+                suppliersWithTransport.push(col);
         } else {
             //nie mozemy sprostac calemu zapotrzebowaniu
-            console.log("Zapasy mniejsze niz zapotrzebowanie")
-            baseTransport[y][x] = supplierSupply[y]; //dajemy tyle ile ma dostwca
-            customerDemand[x] = customerDemand[x] - supplierSupply[y]; //tutaj zeby sie nie zminusowalo
-            supplierSupply[y] = 0; //nie wiem czy potrzebne
-            suppliersWithTransport.push(y);
-            if (customersWithTransport[x] == 0) //to tez nie wiem czy potrzebne
-                customersWithTransport.push(x);
+            //console.log("Zapasy mniejsze niz zapotrzebowanie")
+            baseTransport[col][row] = supplierSupply[col]; //dajemy tyle ile ma dostwca
+            customerDemand[row] = customerDemand[row] - supplierSupply[col]; //tutaj zeby sie nie zminusowalo
+            supplierSupply[col] = 0; //nie wiem czy potrzebne
+            suppliersWithTransport.push(col);
+            if (customersWithTransport[row] == 0) //to tez nie wiem czy potrzebne
+                customersWithTransport.push(row);
         }
     }
 
