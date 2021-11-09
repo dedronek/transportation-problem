@@ -14,6 +14,11 @@ let cumulateSupply = 0;
 let cumulateDemand = 0;
 let demandMet = 0;
 
+let alpha = [];
+let beta = [];
+let delta = [];
+
+
 function getData() {
     supplierSupply = [$('#supply_D1').val(), $('#supply_D2').val()];
     supplierPurchase_price = [$('#purchase_price_D1').val(), $('#purchase_price_D2').val()];
@@ -93,7 +98,7 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
 
     let customersWithTransport = []; //tablica na obsluzonych odbiorcow (bez popytu)
     let suppliersWithTransport = []; //tablica na obsluzonych dostawcow (bez podazy)
-    console.log(baseTransport)
+
     for (let i = 0; i < sortedUnitProfit.length; i++) { //iterujemy po posortowanej tabeli tras najbardziej zyskownych
 
         //mozna by to nazwa row i col, nie byloby zdziwienia ze jest na odwrot przy uzyciu
@@ -141,8 +146,46 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
         }
     }
     if(demandMet == 1) $('.fictional').show();
-    console.log(baseTransport)
     $('#result2_header, #result2_table').show(); //wyswietlanie
+}
+
+
+function countAlphaBetaDelta() { //obliczenie alpha oraz beta
+
+    //Liczenie alphy
+    for (let i = 0; i < 2+demandMet; i++) {
+        for (let l = 3+demandMet; l >= 0; l--) {
+            if(baseTransport[i][l] != null){
+                i == 2 || l == 4 ? alpha[i] = 0 : alpha[i] = unitProfit[i][l]; //Przypisywanie wartości alphy
+                $('#alpha_' + (i + 1)).text(alpha[i]);
+                break;
+            }
+        }
+    }
+
+    //Liczenie bety
+    for (let l = 3+demandMet; l >= 0; l--) {
+        for (let i = 0; i < 2+demandMet; i++) {
+            if(baseTransport[i][l] != null) {
+                beta[l] =  unitProfit[i][l] - alpha[i];
+                $('#beta_' + (l + 1)).text(beta[l]);
+                break;
+            }
+        }
+    }
+
+    //Liczenie delty
+    for (let i = 0; i < 2+demandMet; i++) {
+        delta[i] = [];
+        for (let l = 0; l < 4+demandMet; l++) {
+            delta[i][l] = 'x';
+            if(baseTransport[i][l] == null){
+                delta[i][l] = alpha[i] + beta[l] - unitProfit[i][l];
+            }
+        }
+    }
+
+    console.log(delta)
 }
 
 $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
@@ -153,6 +196,7 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
             countUnitProfit(); //Wynik 1
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
             calculateBaseTransportTable(); //obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
+            countAlphaBetaDelta();
         }
     })
 })
