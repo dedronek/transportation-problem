@@ -180,7 +180,7 @@ function countAlphaBetaDelta() { //obliczenie alpha oraz beta
         for (let l = 0; l < 4+demandMet; l++) {
             delta[i][l] = 'x';
             if(baseTransport[i][l] == null){
-                delta[i][l] = alpha[i] + beta[l] - unitProfit[i][l];
+                delta[i][l] = unitProfit[i][l] - alpha[i] - beta[l];
             }
         }
     }
