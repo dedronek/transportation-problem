@@ -27,6 +27,24 @@ function getData() {
     customerDemand = [$('#demand_O1').val(), $('#demand_O2').val(), $('#demand_O3').val(), $('#demand_O4').val()];
     customerSelling_price = [$('#selling_price_O1').val(), $('#selling_price_O2').val(), $('#selling_price_O3').val(), $('#selling_price_O4').val()];
 
+    //string -> int
+
+    customerSelling_price = customerSelling_price.map(function (x) {
+        return parseInt(x, 10);
+    });
+
+    customerDemand = customerDemand.map(function (x) {
+        return parseInt(x, 10);
+    });
+
+    supplierSupply = supplierSupply.map(function (x) {
+        return parseInt(x, 10);
+    });
+
+    supplierPurchase_price = supplierPurchase_price.map(function (x) {
+        return parseInt(x, 10);
+    });
+
     cumulateSupply = supplierSupply.reduce((a, b) => parseInt(a) + parseInt(b), 0);
     cumulateDemand = customerDemand.reduce((a, b) => parseInt(a) + parseInt(b), 0);
 
@@ -42,10 +60,16 @@ function getData() {
         temp.push($(this).val());
     });
 
+    temp = temp.map(function (x) {
+        return parseInt(x, 10);
+    });
+
     transportCost = [ //Macierz kosztów transportu
         [temp[0], temp[1], temp[2], temp[3]],
         [temp[4], temp[5], temp[6], temp[7]],
     ];
+
+    console.log(transportCost);
 }
 
 function countUnitProfit() { //Obliczanie zysku jednostkowego (1 wynik)
@@ -284,11 +308,11 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
             countUnitProfit(); //Wynik 1
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
             calculateBaseTransportTable(); //Obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
-            countAlphaBetaDelta(); //Obliczenie alpha, beta, delta
+
+            console.log(baseTransport);
+
+            //
+            //countAlphaBetaDelta(); //Obliczenie alpha, beta, delta
         }
     })
 })
-
-
-
-
