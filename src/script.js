@@ -68,8 +68,6 @@ function getData() {
         [temp[0], temp[1], temp[2], temp[3]],
         [temp[4], temp[5], temp[6], temp[7]],
     ];
-
-    console.log(transportCost);
 }
 
 function countUnitProfit() { //Obliczanie zysku jednostkowego (1 wynik)
@@ -176,6 +174,7 @@ function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
     optimalLoop = [];
     alpha = [];
     beta = [];
+    delta = [];
 
     //Liczenie alphy
     for (let i = 0; i < 2+demandMet; i++) {
@@ -216,9 +215,9 @@ function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
             }
         }
     }
-    console.log('delta: ');
-    console.log(delta)
-    if(higestDeltaVal > 0) checkOptimalisationLoop();
+
+    console.log("Najwieksza delta: "+higestDeltaVal);
+   // if(higestDeltaVal > 0) checkOptimalisationLoop();
 }
 
 
@@ -254,12 +253,6 @@ function checkOptimalisationLoop() {  //Sprawdzenie możliwości optymalizacji
     })
     console.log('optimalLoop: ')
     console.log(optimalLoop)
-    console.log('baseTransport przed optymalizacją: ')
-    console.log(baseTransport)
-    setTimeout(function (){
-        applyOptimalisation();
-    }, 2000)
-
 }
 
 
@@ -282,10 +275,8 @@ function applyOptimalisation(){ //Zastosowanie optymalizacji
         else baseTransport[item[0]][item[1]] -= parseInt(optimalLoopMin);
     })
 
-    setTimeout(function (){
         console.log('baseTransport po optymalizacji: ')
         console.log(baseTransport)
-    })
 
 
     for (let i = 0; i < 2+demandMet; i++) { //Wypisywanie danych do tabeli optymalnych przewozów
@@ -297,21 +288,52 @@ function applyOptimalisation(){ //Zastosowanie optymalizacji
         }
     }
 
-    countAlphaBetaDelta();
+
+}
+
+function clearData()
+{
+    supplierSupply = []; //Podaż dostawcy
+    supplierPurchase_price = []; //Cena zakupu dostawcy
+
+    customerDemand = []; //Popyt odbiorcy
+    customerSelling_price = [] //Cena sprzedaży
+
+    transportCost = []; //Macierz kosztów transportu
+    unitProfit = [[], []]; //Macierz zysków jednostkowych
+    sortedUnitProfit = []; //Posortowana tablica zyskow jednostowych
+
+    baseTransport = [[], [], []]; //Tabela trasy bazowej
+
+    cumulateSupply = 0;
+    cumulateDemand = 0;
+    demandMet = 0;
+
+    alpha = [];
+    beta = [];
+    delta = [];
+
+    optimalLoop = [];
 }
 
 $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
     $('#count').click(function () {
         if ($("#main_form")[0].checkValidity()) { //Jeśli formularz jest w pełni wypełniony
             $('#result1_header, #result1_table, #result2_header, #result2_table, .fictional').hide(); //wyswietlanie
+
+            clearData();
+
             getData(); //Pozyskiwanie danych do zmiennych
             countUnitProfit(); //Wynik 1
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
             calculateBaseTransportTable(); //Obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
 
+            countAlphaBetaDelta();
+            console.log(delta);
+            checkOptimalisationLoop();
+            console.log('baseTransport przed optymalizacją: ')
             console.log(baseTransport);
-
-            //
+            applyOptimalisation();
             //countAlphaBetaDelta(); //Obliczenie alpha, beta, delta
         }
     })
