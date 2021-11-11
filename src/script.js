@@ -18,6 +18,7 @@ let alpha = [];
 let beta = [];
 let delta = [];
 
+let optimalLoop = [];
 
 function getData() {
     supplierSupply = [$('#supply_D1').val(), $('#supply_D2').val()];
@@ -106,11 +107,8 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
         let col = sortedUnitProfit[i][1];  //wybor dostawcy
         let row = sortedUnitProfit[i][2];  //wybor odbiorcy
 
-        //console.log('row: ' + col + ", kolumna: " + row + ", " + supplierSupply[col] + '(podaż) - ' + customerDemand[row] + "(popyt), ");
-
         if (customersWithTransport.includes(row) || suppliersWithTransport.includes(col)) {
             //jesli w danej komorce nie ma popytu lub podazy, skipujemy
-            //console.log("Klient obsluzony, skipping...");
             continue;
         }
 
@@ -125,7 +123,6 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
                 suppliersWithTransport.push(col);
         } else {
             //nie mozemy sprostac calemu zapotrzebowaniu
-            //console.log("Zapasy mniejsze niz zapotrzebowanie")
             baseTransport[col][row] = supplierSupply[col]; //dajemy tyle ile ma dostwca
             customerDemand[row] = parseInt(customerDemand[row]) - parseInt(supplierSupply[col]); //tutaj zeby sie nie zminusowalo
             //$('.fictional').show(); //wyswietlanie fikcyjnego dostawcy i odbiorcy
@@ -140,7 +137,7 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
 
     }
 
-    for (let i = 0; i < 2+demandMet; i++) { //wincyj pentli, WINCYJ
+    for (let i = 0; i < 2+demandMet; i++) { //Wypisywanie danych do tabeli optymalnych przewozów
         for (let l = 0; l < 4+demandMet; l++) {
             $('#result2_table_' + (i + 1) + '_' + (l + 1)).text(baseTransport[i][l]);//podmiana wartosci w result2
         }
@@ -150,7 +147,11 @@ function calculateBaseTransportTable() { //obliczenie tabeli transportow bazowyc
 }
 
 
-function countAlphaBetaDelta() { //obliczenie alpha oraz beta
+function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
+    //console.log('Liczymy delty')
+    optimalLoop = [];
+    alpha = [];
+    beta = [];
 
     //Liczenie alphy
     for (let i = 0; i < 2+demandMet; i++) {
@@ -174,6 +175,8 @@ function countAlphaBetaDelta() { //obliczenie alpha oraz beta
         }
     }
 
+    let higestDeltaVal = 0;
+
     //Liczenie delty
     for (let i = 0; i < 2+demandMet; i++) {
         delta[i] = [];
@@ -181,11 +184,96 @@ function countAlphaBetaDelta() { //obliczenie alpha oraz beta
             delta[i][l] = 'x';
             if(baseTransport[i][l] == null){
                 delta[i][l] = unitProfit[i][l] - alpha[i] - beta[l];
+
+                if(higestDeltaVal < delta[i][l]){
+                    optimalLoop[0] = [i, l];
+                    higestDeltaVal = delta[i][l];
+                }
+            }
+        }
+    }
+    console.log('delta: ');
+    console.log(delta)
+    if(higestDeltaVal > 0) checkOptimalisationLoop();
+}
+
+
+function checkOptimalisationLoop() {  //Sprawdzenie możliwości optymalizacji
+    //console.log('Sprawdzamy możliwość optymalizacji')
+
+    let candidateXRow = [];
+    let candidateXColumn = [];
+
+    //Searching X in row where our highest value in Delta is
+    for(let l = 0; l < 4+demandMet; l++) {
+        if(delta[optimalLoop[0][0]][l] == 'x'){
+            candidateXRow.push([optimalLoop[0][0], l]);
+        }
+    }
+
+    //Searching X in column where our highest value in Delta is
+    for(let i = 0; i  < 2+demandMet; i++) {
+        if(delta[i][optimalLoop[0][1]] == 'x'){
+            candidateXColumn.push([i, optimalLoop[0][1]]);
+        }
+    }
+
+    candidateXRow.forEach(function(row){
+        candidateXColumn.forEach(function(column){
+            if(delta[column[0]][row[1]] == 'x'){
+                optimalLoop.push(row);
+                optimalLoop.push([column[0],row[1]]);
+                optimalLoop.push(column);
+                return;
+            }
+        })
+    })
+    console.log('optimalLoop: ')
+    console.log(optimalLoop)
+    console.log('baseTransport przed optymalizacją: ')
+    console.log(baseTransport)
+    setTimeout(function (){
+        applyOptimalisation();
+    }, 2000)
+
+}
+
+
+function applyOptimalisation(){ //Zastosowanie optymalizacji
+    let optimalLoopMin = Number.MAX_SAFE_INTEGER;
+
+    //Searching for minimum from baseTransport
+    optimalLoop.forEach(function(item){
+        if(baseTransport[item[0]][item[1]] < optimalLoopMin && baseTransport[item[0]][item[1]] != '' || baseTransport[item[0]][item[1]] != 'x'){
+            optimalLoopMin = baseTransport[item[0]][item[1]];
+        }
+    })
+
+
+    //Changing values for baseTransport
+    optimalLoop.forEach(function(item, index){
+        if(!baseTransport[item[0]][item[1]] || baseTransport[item[0]][item[1]] == 'x') baseTransport[item[0]][item[1]] = 0; //Jeżeli jest pusta wartość lub X, zmień na 0 aby nie było problemu z typowaniem
+
+        if(index % 2 == 0) baseTransport[item[0]][item[1]] += parseInt(optimalLoopMin);
+        else baseTransport[item[0]][item[1]] -= parseInt(optimalLoopMin);
+    })
+
+    setTimeout(function (){
+        console.log('baseTransport po optymalizacji: ')
+        console.log(baseTransport)
+    })
+
+
+    for (let i = 0; i < 2+demandMet; i++) { //Wypisywanie danych do tabeli optymalnych przewozów
+        for (let l = 0; l < 4+demandMet; l++) {
+            $('#result2_table_' + (i + 1) + '_' + (l + 1)).text(baseTransport[i][l]);//podmiana wartosci w result2
+            if(baseTransport[i][l] == 0){
+                $('#result2_table_' + (i + 1) + '_' + (l + 1)).text('x');//podmiana wartosci w result2
             }
         }
     }
 
-    console.log(delta)
+    countAlphaBetaDelta();
 }
 
 $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
@@ -195,8 +283,12 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
             getData(); //Pozyskiwanie danych do zmiennych
             countUnitProfit(); //Wynik 1
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
-            calculateBaseTransportTable(); //obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
-            countAlphaBetaDelta();
+            calculateBaseTransportTable(); //Obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
+            countAlphaBetaDelta(); //Obliczenie alpha, beta, delta
         }
     })
 })
+
+
+
+
