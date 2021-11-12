@@ -211,7 +211,7 @@ function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
         delta[i] = [];
         for (let l = 0; l < 4 + demandMet; l++) {
             delta[i][l] = 'x';
-            if (baseTransport[i][l] == null || baseTransport[i][l] == 0 ) {
+            if (baseTransport[i][l] == null || baseTransport[i][l] == 0) {
                 delta[i][l] = unitProfit[i][l] - alpha[i] - beta[l];
 
                 if (highestDeltaValue < delta[i][l]) {
@@ -227,10 +227,9 @@ function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
     findPositiveDeltas();
     console.log("Najwieksza delta: " + highestDeltaValue);
 
-    if(highestDeltaValue > 0) {
+    if (highestDeltaValue > 0) {
         checkOptimalisationLoop()
-    }
-     else {
+    } else {
         console.log("Brak mozliwosci optymalizacji")
     }
 }
@@ -388,6 +387,56 @@ function clearData() {
     optimalLoop = [];
 }
 
+function countTotalCost() {
+    let totalCost = 0;
+
+    for (let i = 0; i < 2 + demandMet; i++) {
+        for (let l = 0; l < 4 + demandMet; l++) {
+            if (baseTransport[i][l] != 'x' && baseTransport[i][l] != 0 && baseTransport[i][l]) {
+                if (i == 2 || l == 4) {
+                    break;
+                }
+
+                totalCost += baseTransport[i][l] * transportCost[i][l];
+                //Macierz zysków jednostkowych
+                $('#total_cost').text(totalCost); //Wypisywanie danych do html
+            }
+        }
+    }
+    $('#result3_header, #result3_table').show();
+    //console.log(totalCost);
+}
+
+function countTotalIncome() {
+    let totalIncome = 0;
+
+    for (let i = 0; i < 2 + demandMet; i++) {
+        for (let l = 0; l < 4 + demandMet; l++) {
+            if (baseTransport[i][l] != 'x' && baseTransport[i][l] != 0 && baseTransport[i][l]) {
+                if (i == 2 || l == 4) {
+                    break;
+                }
+
+                totalIncome += (customerSelling_price[l] - supplierPurchase_price[i]) * baseTransport[i][l];
+                console.log(totalIncome);
+                //Macierz zysków jednostkowych
+                $('#total_income').text(totalIncome); //Wypisywanie danych do html
+            }
+        }
+    }
+}
+
+function countTotalIncome() {
+
+
+    let totalCost = $('#total_cost').val();
+    let totalIncome = $('#total_income').val();
+
+    let totalProfit = totalIncome  - totalCost;
+    $('#total_profit').text(totalProfit);
+
+}
+
 $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
     $('#count').click(function () {
         if ($("#main_form")[0].checkValidity()) { //Jeśli formularz jest w pełni wypełniony
@@ -402,6 +451,8 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
 
             countAlphaBetaDelta();
 
+            countTotalCost();
+            countTotalIncome();
             //countAlphaBetaDelta();
             // checkOptimalisationLoop();
             //applyOptimalisation();
