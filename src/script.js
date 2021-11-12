@@ -238,13 +238,13 @@ function countAlphaBetaDelta() { //obliczenie alpha, beta, delta
 function findPositiveDeltas() {
 
     positiveDeltas = [];
-    let minDelta = 1;
+    let minDelta = 0;
 
     let counter = 0;
 
     for (let i = 0; i < 2 + demandMet; i++) {
         for (let l = 0; l < 4 + demandMet; l++) {
-            if (delta[i][l] != 'x' && delta[i][l] >= minDelta) {
+            if (delta[i][l] != 'x' && delta[i][l] > minDelta) {
                 positiveDeltas[counter] = [];
                 positiveDeltas[counter][0] = delta[i][l];
                 positiveDeltas[counter][1] = i;
