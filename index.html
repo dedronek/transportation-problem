@@ -113,6 +113,7 @@
                 <th scope="col">O2</th>
                 <th scope="col">O3</th>
                 <th scope="col">O4</th>
+                <th class="fictional"  scope="col">OF</th>
             </tr>
             </thead>
             <tbody>
@@ -122,6 +123,7 @@
                 <td><p class="text-center" id="result1_table_1_2">x</p></td>
                 <td><p class="text-center" id="result1_table_1_3">x</p></td>
                 <td><p class="text-center" id="result1_table_1_4">x</p></td>
+                <td class="fictional"><p class="text-center">0</p></td>
             </tr>
             <tr>
                 <th scope="row">D2</th>
@@ -129,6 +131,15 @@
                 <td><p class="text-center" id="result1_table_2_2">x</p></td>
                 <td><p class="text-center" id="result1_table_2_3">x</p></td>
                 <td><p class="text-center" id="result1_table_2_4">x</p></td>
+                <td class="fictional"><p class="text-center">0</p></td>
+            </tr>
+            <tr class="fictional">
+                <th  scope="row">DF</th>
+                <td><p class="text-center">0</p></td>
+                <td><p class="text-center">0</p></td>
+                <td><p class="text-center">0</p></td>
+                <td><p class="text-center">0</p></td>
+                <td><p class="text-center">0</p></td>
             </tr>
             </tbody>
         </table>
@@ -207,17 +218,17 @@
         <tbody>
         <tr>
             <th scope="row">Koszt całkowity</th>
-            <td><p class="text-start">1</p></td>
+            <td><p class="text-start" id="total_cost"></p></td>
 
         </tr>
         <tr>
             <th scope="row">Przychód całkowity</th>
-            <td><p class="text-start">1</p></td>
+            <td><p class="text-start" id="total_income"></p></td>
         </tr>
 
         <tr>
             <th scope="row">Zysk pośrednika</th>
-            <td><p class="text-start">1</p></td>
+            <td><p class="text-start" id="total_profit"></p></td>
         </tr>
         </tbody>
     </table>
