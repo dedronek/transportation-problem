@@ -20,9 +20,11 @@ let delta = [];
 let positiveDeltas = [];
 
 let optimalLoop = [];
+let optHowMany = 0;
 
 let candidateXRow = [];
 let candidateXColumn = [];
+
 
 function getData() {
     supplierSupply = [$('#supply_D1').val(), $('#supply_D2').val()];
@@ -357,6 +359,9 @@ function applyOptimalisation() { //Zastosowanie optymalizacji
         }
     }
 
+    optHowMany++;
+    $('#optHowMany span').text(optHowMany);
+    $('#optHowMany').show();
     console.log("Zoptymalizowano rozwiazanie");
 
     countAlphaBetaDelta();
@@ -385,29 +390,12 @@ function clearData() {
     delta = [];
 
     optimalLoop = [];
+    optHowMany = 0;
 }
 
-function countTotalCost() {
+
+function countSummary() {
     let totalCost = 0;
-
-    for (let i = 0; i < 2 + demandMet; i++) {
-        for (let l = 0; l < 4 + demandMet; l++) {
-            if (baseTransport[i][l] != 'x' && baseTransport[i][l] != 0 && baseTransport[i][l]) {
-                if (i == 2 || l == 4) {
-                    break;
-                }
-
-                totalCost += baseTransport[i][l] * transportCost[i][l];
-                //Macierz zysków jednostkowych
-                $('#total_cost').text(totalCost); //Wypisywanie danych do html
-            }
-        }
-    }
-    $('#result3_header, #result3_table').show();
-    //console.log(totalCost);
-}
-
-function countTotalIncome() {
     let totalIncome = 0;
 
     for (let i = 0; i < 2 + demandMet; i++) {
@@ -417,30 +405,24 @@ function countTotalIncome() {
                     break;
                 }
 
+                totalCost += baseTransport[i][l] * transportCost[i][l];
                 totalIncome += (customerSelling_price[l] - supplierPurchase_price[i]) * baseTransport[i][l];
-                console.log(totalIncome);
-                //Macierz zysków jednostkowych
-                $('#total_income').text(totalIncome); //Wypisywanie danych do html
+
             }
         }
     }
-}
 
-function countTotalIncome() {
-
-
-    let totalCost = $('#total_cost').val();
-    let totalIncome = $('#total_income').val();
-
-    let totalProfit = totalIncome  - totalCost;
-    $('#total_profit').text(totalProfit);
+    $('#result3_header, #result3_table').show();
+    $('#total_cost').text(totalCost);
+    $('#total_income').text(totalIncome);
+    $('#total_profit').text(totalIncome  - totalCost);
 
 }
 
 $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
     $('#count').click(function () {
         if ($("#main_form")[0].checkValidity()) { //Jeśli formularz jest w pełni wypełniony
-            $('#result1_header, #result1_table, #result2_header, #result2_table, .fictional').hide(); //wyswietlanie
+            $('#result1_header, #result1_table, #result2_header, #result2_table, .fictional, #optHowMany').hide(); //wyswietlanie
 
             clearData();
 
@@ -449,16 +431,8 @@ $(document).ready(function () { //Główna funkcja, tutaj piszemy kod
             sortUnitProfit(); //Sortowanie od tras najbardziej zyskownych
             calculateBaseTransportTable(); //Obliczanie trasy bazowej i jej wyswietlenie (Wynik 1,5)
 
-            countAlphaBetaDelta();
-
-            countTotalCost();
-            countTotalIncome();
-            //countAlphaBetaDelta();
-            // checkOptimalisationLoop();
-            //applyOptimalisation();
-            // console.log(delta);
-            //checkOptimalisationLoop();
-            //console.log(optimalLoop);
+            countAlphaBetaDelta(); //Liczenie alfy, bety, delty
+            countSummary(); //Zliczanie podsumowania zysków
         }
     })
 })
